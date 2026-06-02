@@ -16,21 +16,23 @@ jobs:
         working-directory: frontend
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: "npm"
 
-      - name: Install Dependencies
-        run: npm install
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Run Tests
+      - name: Run tests
         run: npm test -- --watchAll=false
 
-      - name: Security Audit
+      - name: Security audit
         run: npm audit --audit-level=high
 
-      - name: Build React App
+      - name: Build React app
         run: npm run build

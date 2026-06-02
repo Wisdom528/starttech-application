@@ -16,18 +16,25 @@ jobs:
         working-directory: backend
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
           go-version: "1.24"
 
-      - name: Run Tests
+      - name: Download dependencies
+        run: go mod tidy
+
+      - name: Run tests
         run: go test ./...
 
-      - name: Build Application
+      - name: Build application
         run: go build -v ./...
 
-      - name: Go Vulnerability Scan
-        run: go install golang.org/x/vuln/cmd/govulncheck@latest && govulncheck ./...
+      - name: Install vulnerability scanner
+        run: go install golang.org/x/vuln/cmd/govulncheck@latest
+
+      - name: Run vulnerability scan
+        run: govulncheck ./...
